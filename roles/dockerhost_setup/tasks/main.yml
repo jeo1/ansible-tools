@@ -1,0 +1,6 @@
+- block:
+  - import_tasks: subtasks/mount_nfs.yml
+    when: nfs_mounts is defined
+
+  - import_tasks: subtasks/mount_smb.yml
+    when: smb_mounts is defined

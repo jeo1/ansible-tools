@@ -9,3 +9,9 @@
   roles:
     - role: get_nginx_data
   tags: get_nginx_data
+
+- hosts: all
+  become: true
+  roles:
+    - role: dockerhost_setup
+  tags: dockerhost_setup

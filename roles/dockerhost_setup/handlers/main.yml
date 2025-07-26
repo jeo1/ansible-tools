@@ -1,0 +1,11 @@
+- name: Start and enable nfs on (Alpine)
+  shell: |
+    rc-update add nfsmount
+    rc-service nfsmount start
+    rc-update add netmount
+    rc-service netmount start
+
+- name: Start and enable smb on (Alpine)
+  shell: |
+    rc-update add netmount
+    rc-service netmount start

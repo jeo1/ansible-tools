@@ -1,0 +1,23 @@
+- name: Install nfs mount packages on (Ubuntu, Debian)
+  package:
+    state: latest
+    name:
+      - nfs-common
+  when: ansible_distribution in ["Debian", "Ubuntu"]
+
+- name: Install nfs mount packages on (Alpine)
+  apk:
+    name: 
+      - nfs-utils
+  when: ansible_distribution in ["Alpine"]
+  notify: Start and enable nfs on (Alpine)
+
+- meta: flush_handlers
+
+- name: Mount an NFS volumes
+  mount:
+    src: "{{ item.value.src }}"
+    path: "{{ item.value.mount_point }}"
+    fstype: nfs
+    state: mounted
+  loop: "{{ lookup('dict', nfs_mounts, wantlist=True) }}"
