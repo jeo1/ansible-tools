@@ -1,0 +1,4 @@
+nginx_conf_dst: /opt/nginx_data.yml
+nginx_post_script_dst: /opt/post_data.sh
+nginx_data_port: 12345
+push_repo_file: /opt/push_repos.sh

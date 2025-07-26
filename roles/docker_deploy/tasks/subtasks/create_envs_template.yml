@@ -1,0 +1,10 @@
+- name: Fetch template from remote host
+  fetch:
+    src: "{{ env_template.env_src }}"
+    dest: "{{ playbook_dir }}/{{ env_template.env_src | basename }}"
+    flat: yes
+
+- name: Apply template
+  template:
+    src: "{{ playbook_dir }}/{{ env_template.env_src | basename }}"
+    dest: "{{ env_template.env_dst }}"

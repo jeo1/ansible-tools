@@ -1,0 +1,100 @@
+- name: Create docker network
+  community.docker.docker_network:
+    name: "{{ item.value.docker_network_name }}"
+    driver: macvlan
+    ipam_config:
+      - subnet: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.prefix }}"
+        gateway: "{{ ansible_default_ipv4.gateway }}"
+    driver_options:
+      parent: "{{ ansible_default_ipv4.interface }}"
+  when:
+    item.value.docker_network_name is defined
+
+
+- block:
+  - name: Clone docker compose git repos
+    git:
+      repo: "{{ item.value.git_repo_url }}"
+      dest: "{{ item.value.docker_dir }}"
+    when:
+      - item.value.git_repo_branch is not defined
+  - name: Clone docker compose git repos
+    git:
+      repo: "{{ item.value.git_repo_url }}"
+      dest: "{{ item.value.docker_dir }}"
+      version: "{{ item.value.git_repo_branch }}"
+    when:
+      - item.value.git_repo_branch is defined
+
+  - name: Create dirs
+    file:
+      path: "{{ loop_var.config_path }}"
+      state: "{{ loop_var.state }}"
+      mode: "{{ loop_var.file_mode }}"
+    loop: "{{ item.value.config_dir }}"
+    loop_control:
+      loop_var: loop_var
+      label: "{{ loop_var }}" 
+    when:
+      item.value.config_dir is defined
+
+  - name: Copy .env
+    copy:
+      src: "{{ loop_var.env_src }}"
+      dest: "{{ loop_var.env_dst }}"
+      remote_src: yes
+    loop: "{{ item.value.env_files }}"
+    loop_control:
+      loop_var: loop_var
+      label: "{{ loop_var }}"
+    when:
+      item.value.env_files is defined
+
+- include_tasks: create_envs.yml
+  loop: "{{ item.value.env_templates }}"
+  loop_control:
+    loop_var: loop_var
+    label: "{{ loop_var }}"
+  when:
+    - item.value.env_templates is defined
+
+- block:
+  - name: Check for config dir
+    stat:
+      path: "{{ item.value.config_repo_dir }}"
+    register: config_dir_status
+    when:
+      - item.value.config_repo_url is defined
+      - item.value.config_repo_dir is defined
+
+  - name: Restore config
+    git:
+      repo: "{{ item.value.config_repo_url }}"
+      dest: "{{ item.value.config_repo_dir }}"
+    when:
+      - item.value.config_repo_url is defined
+      - item.value.config_repo_dir is defined
+      - not config_dir_status.stat.exists
+
+  - include_tasks: setup_push_repo.yml
+    loop: "{{ item.value.git_config_push }}"
+    loop_control:
+      loop_var: loop_var
+      label: "{{ loop_var }}"
+    when:
+      - item.value.git_config_push is defined
+
+
+- name: Run docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ item.value.docker_dir }}"
+    state: present
+
+
+- include_tasks: create_nginx_data.yml
+  loop: "{{ item.value.nginx_info }}"
+  loop_control:
+    loop_var: loop_var
+    label: "{{ loop_var }}"
+  when:
+    - item.value.nginx_info is defined
