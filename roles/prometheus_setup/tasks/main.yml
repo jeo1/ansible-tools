@@ -1,7 +1,7 @@
 - name: test
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: ""
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - test"
     insertafter: BOF
     block: |
       global:
