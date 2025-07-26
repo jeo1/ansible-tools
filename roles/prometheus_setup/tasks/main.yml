@@ -11,7 +11,7 @@
 - name: test
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: "# {mark} global setting"
+    marker: ""
     insertafter: "scrape_configs:"
     block: |2
       - job_name: prometheus
