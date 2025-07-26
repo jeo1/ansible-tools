@@ -1,0 +1,11 @@
+- name: test
+  blockinfile:
+    path: "{{ prometheus_config }}"
+    marker: ""
+    insertafter: BOF
+    block: |
+      global:
+        scrape_interval: 10s
+
+    
+

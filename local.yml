@@ -15,3 +15,9 @@
   roles:
     - role: dockerhost_setup
   tags: dockerhost_setup
+
+- hosts: all
+  become: true
+  roles:
+    - role: prometheus_setup
+  tags: prometheus_setup
