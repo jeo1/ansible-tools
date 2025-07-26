@@ -1,1 +1,2 @@
 prometheus_config: /home/config/prometheus/prometheus.yml
+job_name: prometheus

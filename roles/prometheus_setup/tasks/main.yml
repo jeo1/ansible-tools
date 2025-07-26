@@ -1,7 +1,7 @@
 - name: test
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: "# {mark} global setting"
+    marker: "# {mark}"
     insertafter: BOF
     block: |
       global:
@@ -14,8 +14,15 @@
     marker: ""
     insertafter: "scrape_configs:"
     block: |2
-      - job_name: prometheus
+      - job_name: {{ job_name }}
         static_configs:
           - targets:
 
 
+- name: Insert line after targets
+  lineinfile:
+    path: /path/to/your/file
+    insertafter: '^.*- targets:.*'
+    line: "  - {{ item }}"
+    state: present
+  loop: "{{ conf_ip_list_name }}"
