@@ -1,5 +1,6 @@
-- hosts: all
+- name: Run on localhost
+  hosts: localhost
+  connection: local
   become: true
   roles:
     - role: docker_deploy
-  tags: docker-deploy
