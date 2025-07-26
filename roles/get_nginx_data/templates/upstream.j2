@@ -1,0 +1,5 @@
+upstream {{ service_name }} {
+    zone {{ service_name }} 64k;
+    server {{ service_ip }}:{{ service_port }};
+    keepalive 2;
+}

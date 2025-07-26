@@ -1,0 +1,16 @@
+- name: Get data from remote
+  uri:
+    url: "http://{{ nginx_data_ip }}:{{ nginx_data_port }}"
+    return_content: yes
+    status_code: [200, -1]
+  register: remote_status
+  changed_when: remote_status.status == 200
+
+- name: Write data to file
+  blockinfile:
+    path: "{{ nginx_conf_ip_path }}"
+    block: |
+      {{ remote_status.content }}
+    marker: ""
+  when:
+    - remote_status.changed

@@ -2,4 +2,10 @@
   become: true
   roles:
     - role: docker_deploy
-  tags: docker-deploy
+  tags: docker_deploy
+
+- hosts: all
+  become: true
+  roles:
+    - role: get_nginx_data
+  tags: get_nginx_data

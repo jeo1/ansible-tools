@@ -1,0 +1,16 @@
+- block:
+  - name: create nginx conf dirs
+    file:
+      path: "{{ item }}"
+      state: directory
+    loop:
+      - "{{ server_conf_path }}"
+      - "{{ upstream_conf_path }}"
+
+- include_tasks: subtasks/create_confs.yml
+  loop: "{{ nginx_conf_host_ip_list }}"
+  loop_control:
+    loop_var: ngix_data
+    label: "{{ ngix_data }}"
+  when:
+    - nginx_conf_host_ip_list is defined

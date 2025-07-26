@@ -1,0 +1,15 @@
+- set_fact:
+    service_ip: "{{ ngix_data.service_ip }}"
+    service_name: "{{ ngix_data.service_name }}"
+    service_port: "{{ ngix_data.service_port }}"
+    service_url: "{{ ngix_data.service_url }}"
+
+- name: Copy server conf
+  template:
+    src: server.j2
+    dest: "{{ server_conf_path }}/{{ service_name }}.conf"
+
+- name: Copy upstream conf
+  template:
+    src: upstream.j2
+    dest: "{{ upstream_conf_path }}/{{ service_name }}.conf"
