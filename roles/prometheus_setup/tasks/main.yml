@@ -3,25 +3,25 @@
     path: "{{ prometheus_config }}"
     state: touch
 
-- name: Create glboal
-  blockinfile:
-    path: "{{ prometheus_config }}"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    insertafter: BOF
-    block: |
-      global:
-        scrape_interval: 10s
-      scrape_configs:
-
-- name: Create static_configs
-  blockinfile:
-    path: "{{ prometheus_config }}"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK - {{ job_name }}"
-    insertafter: "scrape_configs:"
-    block: |2
-      - job_name: {{ job_name }}
-        static_configs:
-        - targets:
+#- name: Create glboal
+#  blockinfile:
+#    path: "{{ prometheus_config }}"
+#    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+#    insertafter: BOF
+#    block: |
+#      global:
+#        scrape_interval: 10s
+#      scrape_configs:
+#
+#- name: Create static_configs
+#  blockinfile:
+#    path: "{{ prometheus_config }}"
+#    marker: "# {mark} ANSIBLE MANAGED BLOCK - {{ job_name }}"
+#    insertafter: "scrape_configs:"
+#    block: |2
+#      - job_name: {{ job_name }}
+#        static_configs:
+#        - targets:
 
 #- name: Insert ips
 #  lineinfile:
@@ -31,7 +31,16 @@
 #    state: present
 #  loop: "{{ prometheus_ip_list }}"
 
-- name: Restart docker compose
-  community.docker.docker_compose_v2:
-    project_src: "{{ prometheus_docker_dir }}"
-    state: restarted
+#- name: Restart docker compose
+#  community.docker.docker_compose_v2:
+#    project_src: "{{ prometheus_docker_dir }}"
+#    state: restarted
+
+
+- name: Print exporter type and IP
+  debug:
+    msg: "Exporter type: {{ item.0 }} | IP: {{ item.1 }}"
+  loop: >
+        {{ prometheus_ip_list | dict2items | map('combine', {'0': item.key, '1': item.value}) | list | map('flatten') | list }}
+  loop_control:
+        label: "{{ item.1 }}"
