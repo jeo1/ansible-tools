@@ -39,8 +39,5 @@
 
 - name: Print exporter type and IP
   debug:
-    msg: "Exporter type: {{ item.0 }} | IP: {{ item.1 }}"
-  loop: >
-        {{ prometheus_ip_list | dict2items | map('combine', {'0': item.key, '1': item.value}) | list | map('flatten') | list }}
-  loop_control:
-        label: "{{ item.1 }}"
+    msg: "{{ item }}"
+  loop: "{{ lookup('dict', prometheus_ip_list, wantlist=True) }}"
