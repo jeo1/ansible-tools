@@ -6,7 +6,7 @@
 - name: Create glboal
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: "# {mark}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
     insertafter: BOF
     block: |
       global:
