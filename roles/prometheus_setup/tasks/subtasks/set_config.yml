@@ -8,6 +8,7 @@
       - job_name: {{ item.key }}
         static_configs:
         - targets:
+    state: present
 
 #- name: Insert ips
 #  lineinfile:
