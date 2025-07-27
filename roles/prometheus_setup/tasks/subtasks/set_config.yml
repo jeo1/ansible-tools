@@ -2,7 +2,7 @@
 - name: Create static_configs
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: ""
+    marker: "# {mark} STATIC CONFIG {{ item.key }}"
     insertafter: "# END 1"
     block: |2
       - job_name: {{ item.key }}
