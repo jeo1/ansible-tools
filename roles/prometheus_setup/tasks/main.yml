@@ -3,10 +3,10 @@
     path: "{{ prometheus_config }}"
     state: touch
 
-- name: Create glboal
+- name: Create global config
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: "# {mark} 1"
+    marker: "# {mark} GLOBAL CONFIG"
     insertafter: BOF
     block: |
       global:

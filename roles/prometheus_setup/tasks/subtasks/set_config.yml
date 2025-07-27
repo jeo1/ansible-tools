@@ -3,12 +3,25 @@
   blockinfile:
     path: "{{ prometheus_config }}"
     marker: "# {mark} STATIC CONFIG {{ item.key }}"
-    insertafter: "# END 1"
+    insertafter: "# END GLOBAL CONFIG"
     block: |2
       - job_name: {{ item.key }}
         static_configs:
         - targets:
     state: present
+
+- name: Insert ips
+  lineinfile:
+    path: "{{ prometheus_config }}"
+    insertafter: "# END STATIC CONFIG {{ item.key }}"
+    line: "    - {{ ip }}"
+    state: present
+  loop: "{{ item.value }}"
+  loop_control:
+    loop_var: ip
+    label: "{{ ip }}"
+
+
 
 #- name: Insert ips
 #  lineinfile:
