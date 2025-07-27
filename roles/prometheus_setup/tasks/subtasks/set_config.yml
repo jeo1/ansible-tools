@@ -2,7 +2,7 @@
 - name: Create static_configs
   blockinfile:
     path: "{{ prometheus_config }}"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK - {{ job_name }}"
+    marker: ""
     insertafter: "# END 1"
     block: |2
       - job_name: {{ item.key }}
