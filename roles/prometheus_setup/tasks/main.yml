@@ -15,8 +15,8 @@
     insertafter: "scrape_configs:"
     block: |2
       - job_name: {{ job_name }}
-      static_configs:
-      - targets:
+        static_configs:
+        - targets:
 
 
 - name: Insert line after targets
