@@ -25,4 +25,4 @@
     insertafter: '^.*- targets:.*'
     line: "  - {{ item }}"
     state: present
-  loop: "{{ conf_ip_list_name }}"
+  loop: "{{ prometheus_ip_list }}"
