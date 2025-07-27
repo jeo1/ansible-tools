@@ -23,13 +23,13 @@
         static_configs:
         - targets:
 
-- name: Insert ips
-  lineinfile:
-    path: "{{ prometheus_config }}"
-    insertafter: '^.*- targets:.*'
-    line: "    - {{ item }}"
-    state: present
-  loop: "{{ prometheus_ip_list }}"
+#- name: Insert ips
+#  lineinfile:
+#    path: "{{ prometheus_config }}"
+#    insertafter: '^.*- targets:.*'
+#    line: "    - {{ item }}"
+#    state: present
+#  loop: "{{ prometheus_ip_list }}"
 
 - name: Restart docker compose
   community.docker.docker_compose_v2:
