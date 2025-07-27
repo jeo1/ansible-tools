@@ -1,4 +1,3 @@
-#
 - name: Create static_configs
   blockinfile:
     path: "{{ prometheus_config }}"
@@ -20,25 +19,3 @@
   loop_control:
     loop_var: ip
     label: "{{ ip }}"
-
-
-
-#- name: Insert ips
-#  lineinfile:
-#    path: "{{ prometheus_config }}"
-#    insertafter: '^.*- targets:.*'
-#    line: "    - {{ item }}"
-#    state: present
-#  loop: "{{ prometheus_ip_list }}"
-
-
-- debug:
-    msg: "{{ item.key }}"
-- debug:
-    msg: "{{ item.value }}"
-- debug:
-    msg: "{{ x }}"
-  loop: "{{ item.value }}"
-  loop_control:
-    loop_var: x
-    label: "{{ x }}"

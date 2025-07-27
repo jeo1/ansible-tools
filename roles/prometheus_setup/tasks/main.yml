@@ -13,7 +13,6 @@
         scrape_interval: 10s
       scrape_configs:
 
-
 - include_tasks: subtasks/set_config.yml
   loop: "{{ lookup('dict', prometheus_ip_list, wantlist=True) }}"
 
