@@ -30,3 +30,8 @@
     line: "    - {{ item }}"
     state: present
   loop: "{{ prometheus_ip_list }}"
+
+- name: Restart docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ prometheus_docker_dir }}"
+    state: restarted
