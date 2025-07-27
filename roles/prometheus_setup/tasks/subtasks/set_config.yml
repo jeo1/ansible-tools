@@ -1,0 +1,39 @@
+#- name: Create glboal
+#  blockinfile:
+#    path: "{{ prometheus_config }}"
+#    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+#    insertafter: BOF
+#    block: |
+#      global:
+#        scrape_interval: 10s
+#      scrape_configs:
+#
+#- name: Create static_configs
+#  blockinfile:
+#    path: "{{ prometheus_config }}"
+#    marker: "# {mark} ANSIBLE MANAGED BLOCK - {{ job_name }}"
+#    insertafter: "scrape_configs:"
+#    block: |2
+#      - job_name: {{ job_name }}
+#        static_configs:
+#        - targets:
+
+#- name: Insert ips
+#  lineinfile:
+#    path: "{{ prometheus_config }}"
+#    insertafter: '^.*- targets:.*'
+#    line: "    - {{ item }}"
+#    state: present
+#  loop: "{{ prometheus_ip_list }}"
+
+
+- debug:
+    msg: "{{ item.key }}"
+- debug:
+    msg: "{{ item.value }}"
+- debug:
+    msg: "{{ x }}"
+  loop: "{{ item.value }}"
+  loop_control:
+    loop_var: x
+    label: "{{ x }}"
