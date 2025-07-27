@@ -21,7 +21,7 @@
 
 - name: Insert line after targets
   lineinfile:
-    path: /path/to/your/file
+    path: "{{ prometheus_config }}"
     insertafter: '^.*- targets:.*'
     line: "  - {{ item }}"
     state: present
