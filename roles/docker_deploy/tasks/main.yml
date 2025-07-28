@@ -1,3 +1,8 @@
+- name: Delete nginx conf
+  file:
+    path: "{{ nginx_conf_dst }}"
+    state: absent
+
 - name: Create cron task to for push repo
   cron:
     user: root
