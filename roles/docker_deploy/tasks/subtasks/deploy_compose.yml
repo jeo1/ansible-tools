@@ -84,9 +84,10 @@
     when:
       - item.value.git_config_push is defined
 
+
 - name: zzzTestzzz
   debug:
-    msg: "yoooo"
+    msg: "{{ item.key }}"
 
 - name: Run docker compose
   community.docker.docker_compose_v2:
