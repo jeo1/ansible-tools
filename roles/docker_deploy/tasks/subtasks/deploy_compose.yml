@@ -76,10 +76,6 @@
       - item.value.config_repo_dir is defined
       - not config_dir_status.stat.exists
 
-  - name: zzzTestzzz
-    debug:
-      msg: "{{ item.key }}"
-
   - include_tasks: setup_push_repo.yml
     loop: "{{ item.value.git_config_push }}"
     loop_control:
@@ -88,6 +84,9 @@
     when:
       - item.value.git_config_push is defined
 
+- name: zzzTestzzz
+  debug:
+    msg: "yoooo"
 
 - name: Run docker compose
   community.docker.docker_compose_v2:
