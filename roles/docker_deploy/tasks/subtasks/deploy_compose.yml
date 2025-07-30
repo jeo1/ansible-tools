@@ -89,7 +89,7 @@
   debug:
     msg: "{{ item.key }}"
 
-- name: Run docker compose
+- name: "Run docker compose | {{ item.key }}"
   community.docker.docker_compose_v2:
     project_src: "{{ item.value.docker_dir }}"
     state: present
