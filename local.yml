@@ -13,8 +13,8 @@
 - hosts: all
   become: true
   roles:
-    - role: dockerhost_setup
-  tags: dockerhost_setup
+    - role: mount_setup
+  tags: mount_setup
 
 - hosts: all
   become: true
