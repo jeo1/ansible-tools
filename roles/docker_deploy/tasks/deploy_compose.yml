@@ -2,36 +2,26 @@
   when:
     item.value.docker_network_name is defined
 
-- set_fact:
-    git_version: "HEAD"
-  when:
-    - item.value.git_repo_branch is undefined
+- include_tasks: subtasks/pull_repo.yml
 
-- set_fact:
-    git_version: "{{ item.value.git_repo_branch }}"
+- name: Create dirs
+  file:
+    path: "{{ dir_loop_var.config_path }}"
+    state: "{{ dir_loop_var.state }}"
+    mode: "{{ dir_loop_var.file_mode }}"
+  loop: "{{ item.value.config_dir }}"
+  loop_control:
+    loop_var: dir_loop_var
+    label: "{{ dir_loop_var }}" 
   when:
-    - item.value.git_repo_branch is defined
+    item.value.config_dir is defined
 
-- name: Clone docker compose git repos
-  git:
-    repo: "{{ item.value.git_repo_url }}"
-    dest: "{{ item.value.docker_dir }}"
-    version: "{{ git_version }}"
+
+
+
 
 
 - block:
-  - name: Create dirs
-    file:
-      path: "{{ loop_var.config_path }}"
-      state: "{{ loop_var.state }}"
-      mode: "{{ loop_var.file_mode }}"
-    loop: "{{ item.value.config_dir }}"
-    loop_control:
-      loop_var: loop_var
-      label: "{{ loop_var }}" 
-    when:
-      item.value.config_dir is defined
-
   - name: Copy .env
     copy:
       src: "{{ loop_var.env_src }}"

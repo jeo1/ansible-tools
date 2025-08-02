@@ -1,0 +1,16 @@
+- set_fact:
+    git_version: "HEAD"
+  when:
+    - item.value.git_repo_branch is undefined
+
+- set_fact:
+    git_version: "{{ item.value.git_repo_branch }}"
+  when:
+    - item.value.git_repo_branch is defined
+
+- name: Clone docker compose git repos
+  git:
+    repo: "{{ item.value.git_repo_url }}"
+    dest: "{{ item.value.docker_dir }}"
+    version: "{{ git_version }}"
+    
