@@ -1,34 +1,33 @@
-- name: Delete nginx conf
-  file:
-    path: "{{ nginx_conf_dst }}"
-    state: absent
-
-- name: Create cron task to for push repo
-  cron:
-    user: root
-    name: push repos
-    minute: 0
-    hour: 4
-    job: "bash {{ push_repo_file }}"
-
 - block:
+  - name: Delete nginx conf
+    file:
+      path: "{{ nginx_conf_dst }}"
+      state: absent
+
+  - name: Setup git credentials
+    copy:
+      dest: /root/.git-credentials
+      content: "http://{{ git_username }}:{{ git_password }}@{{ git_server_ip }}"
+      mode: "0600"
+    when:
+      - git_username is defined
+      - git_password is defined
+      - git_server_ip is defined
+  
+  - name: Set git credential helper to 'store'
+    shell: git config --global credential.helper store
+
+  # check if job needs to be created
+  - name: Create cron task to for push repo
+    cron:
+      user: root
+      name: push repos
+      minute: 0
+      hour: 4
+      job: "bash {{ push_repo_file }}"
+
   - include_tasks: subtasks/deploy_compose.yml
     loop: "{{ lookup('dict', docker_composes, wantlist=True) }}"
     when: docker_composes is defined
 
-- stat:
-    path: "{{ nginx_conf_dst }}"
-  register: nginx_data_file
-
-- name: Setup git credentials
-  copy:
-    dest: /root/.git-credentials
-    content: "http://{{ git_username }}:{{ git_password }}@{{ git_server_ip }}"
-    mode: "0600"
-  when:
-    - git_username is defined
-    - git_password is defined
-    - git_server_ip is defined
-    
-- name: Set git credential helper to 'store'
-  shell: git config --global credential.helper store
+  when: docker_composes is defined
