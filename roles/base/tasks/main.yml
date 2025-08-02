@@ -1,0 +1,5 @@
+- block:
+  - import_tasks: subtasks/upgrade.yml
+  - import_tasks: subtasks/packages_utilities.yml
+  - import_tasks: subtasks/install_docker.yml
+  

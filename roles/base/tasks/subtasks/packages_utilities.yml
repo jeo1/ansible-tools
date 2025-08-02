@@ -1,0 +1,27 @@
+- name: Install utility packages on (Ubuntu, Debian)
+  package:
+    state: latest
+    name:
+      - curl
+      - wget
+      - git
+      - nano
+      - gnupg
+      - ca-certificates
+      - tmux
+      - htop
+      - cron
+      - cloud-utils
+      - tree
+  when: ansible_distribution in ["Debian", "Ubuntu"]
+
+- name: Install utility packages on (Alpine)
+  apk:
+    name:
+      - tree
+      - nano
+      - git
+      - cronie
+      - curl
+      - wget
+  when: ansible_distribution in ["Alpine"]

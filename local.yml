@@ -1,3 +1,9 @@
+- hosts: base
+  become: true
+  roles:
+    - role: base
+  tags: base
+
 - hosts: all
   become: true
   roles:

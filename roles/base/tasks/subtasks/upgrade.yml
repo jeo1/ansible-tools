@@ -1,0 +1,14 @@
+- name: Upgrade apt packages on (Ubuntu, Debian)
+  become: true
+  apt:
+    update_cache: yes
+    upgrade: yes
+    autoclean: yes
+    autoremove: yes
+  when: ansible_distribution in ["Debian", "Ubuntu"]
+
+- name: Upgrade apk packages on (Alpine)
+  apk:
+    update_cache: true
+    upgrade: true
+  when: ansible_distribution in ["Alpine"]

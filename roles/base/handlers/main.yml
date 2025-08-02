@@ -1,0 +1,21 @@
+- name: Wait for cache
+  wait_for:
+    timeout: 2
+  listen: "Update cache on (Ubuntu, Debian) for Docker repo"
+
+- name: Update cache on (Ubuntu, Debian)
+  apt:
+    update_cache: yes
+    cache_valid_time: 1
+  listen: "Update cache on (Ubuntu, Debian) for Docker repo"
+
+- name: Start and enable Docker on (Alpine)
+  shell: |
+    rc-update add docker default
+    service docker start
+  listen: "Docker on Alpine"
+
+- name: Restart for Docker on (Alpine)
+  reboot:
+    reboot_timeout: 300
+  listen: "Docker on Alpine"
