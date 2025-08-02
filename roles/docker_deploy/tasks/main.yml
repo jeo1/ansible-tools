@@ -26,7 +26,7 @@
       hour: 4
       job: "bash {{ push_repo_file }}"
 
-  - include_tasks: subtasks/deploy_compose.yml
+  - include_tasks: deploy_compose.yml
     loop: "{{ lookup('dict', docker_composes, wantlist=True) }}"
     when: docker_composes is defined
 
