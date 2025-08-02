@@ -17,23 +17,6 @@
     item.value.config_dir is defined
 
 
-
-
-
-
-- block:
-  - name: Copy .env
-    copy:
-      src: "{{ loop_var.env_src }}"
-      dest: "{{ loop_var.env_dst }}"
-      remote_src: yes
-    loop: "{{ item.value.env_files }}"
-    loop_control:
-      loop_var: loop_var
-      label: "{{ loop_var }}"
-    when:
-      item.value.env_files is defined
-
 - include_tasks: subtasks/create_envs.yml
   loop: "{{ item.value.env_templates }}"
   loop_control:
@@ -41,6 +24,20 @@
     label: "{{ loop_var }}"
   when:
     - item.value.env_templates is defined
+
+#- name: Copy .env
+#   copy:
+#     src: "{{ loop_var.env_src }}"
+#     dest: "{{ loop_var.env_dst }}"
+#     remote_src: yes
+#   loop: "{{ item.value.env_files }}"
+#   loop_control:
+#     loop_var: loop_var
+#     label: "{{ loop_var }}"
+#   when:
+#     item.value.env_files is defined
+
+
 
 - block:
   - name: Check for config dir
