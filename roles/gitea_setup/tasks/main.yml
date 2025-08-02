@@ -1,0 +1,42 @@
+- set_fact:
+    gitea_hostname: "{{ ansible_default_ipv4.address }}"
+  when: gitea_hostname is undefined
+
+- name: "Wait until gitea is up | http://{{ gitea_hostname }}:{{ GITEA_HTTP_PORT }}"
+  uri:
+    url: http://{{ gitea_hostname }}:{{ GITEA_HTTP_PORT }}
+    return_content: no
+    status_code: 200
+    validate_certs: no
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 5
+  changed_when: false
+
+- name: Configure Gitea (install page)
+  uri:
+    url: "http://{{ gitea_hostname }}:{{ GITEA_HTTP_PORT }}"
+    method: POST
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+    body_format: form-urlencoded
+    body:
+      db_type: "{{ gitea_db_type }}"
+      db_path: "{{ gitea_db_path }}"
+      app_name: "{{ gitea_app_name }}"
+      repo_root_path: "{{ gitea_repo_root_path }}"
+      lfs_root_path: "{{ gitea_lfs_root_path }}"
+      run_user: "{{ gitea_run_user }}"
+      domain: "{{ gitea_hostname }}"
+      ssh_port: "{{ GITEA_SSH_PORT }}"
+      http_port: "{{ GITEA_HTTP_PORT }}"
+      app_url: "http://{{ gitea_hostname }}:{{ GITEA_HTTP_PORT }}"
+      log_root_path: "{{ gitea_log_root_path }}"
+      admin_name: "{{ gitea_admin_name }}"
+      admin_email: "{{ gitea_admin_email }}"
+      admin_passwd: "{{ gitea_admin_passwd }}"
+      admin_confirm_passwd: "{{ gitea_admin_passwd }}"
+    status_code: [200, 302, 404, 405]
+  register: gitea_install_resp
+  changed_when: gitea_install_resp.status == 200

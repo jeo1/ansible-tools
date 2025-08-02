@@ -1,8 +1,8 @@
 - hosts: all
   become: true
   roles:
-    - role: docker_deploy
-  tags: docker_deploy
+    - role: mount_setup
+  tags: mount_setup
 
 - hosts: all
   become: true
@@ -13,11 +13,17 @@
 - hosts: all
   become: true
   roles:
-    - role: mount_setup
-  tags: mount_setup
+    - role: docker_deploy
+  tags: docker_deploy
 
 - hosts: all
   become: true
   roles:
     - role: prometheus_setup
   tags: prometheus_setup
+
+- hosts: gitea
+  become: true
+  roles:
+    - role: gitea_setup
+  tags: gitea_setup

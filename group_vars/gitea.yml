@@ -1,0 +1,25 @@
+gitea_docker_dir: /home/gitea
+node_exporter_docker_dir: /home/node-exporter
+GITEA_DATA: /home/config/gitea
+
+GITEA_HTTP_PORT: 3000
+GITEA_SSH_PORT: 222
+NODE_EXPORTER_PORT: 9100
+
+docker_composes:
+  gitea:
+    git_repo_url: https://github.com/jeo1/docker-templates.git
+    git_repo_branch: gitea
+    docker_dir: "{{ gitea_docker_dir }}"
+    env_templates:
+      - env_src: "{{ gitea_docker_dir }}/env.j2"
+        env_dst: "{{ gitea_docker_dir }}/.env"
+
+  node-exporter:
+    git_repo_url: https://github.com/jeo1/docker-templates.git
+    git_repo_branch: node-exporter
+    docker_dir: "{{ node_exporter_docker_dir }}"
+    env_templates:
+      - env_src: "{{ node_exporter_docker_dir }}/env.j2"
+        env_dst: "{{ node_exporter_docker_dir }}/.env"
+        
