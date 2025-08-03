@@ -1,11 +1,17 @@
-- name: Ensure parent directory exists
-  ansible.builtin.file:
-    path: "{{ loop_var.env_dst | dirname }}"
+- name: "Ensure parent directory exists | {{ item.key }} | {{ loop_var_env.env_dst | dirname }}"
+  file:
+    path: "{{ loop_var_env.env_dst | dirname }}"
     state: directory
     mode: '0755'
 
-- include_tasks: create_envs_template.yml
-  loop: "{{ item.value.env_templates }}"
-  loop_control:
-    loop_var: env_template
-    label: "{{ env_template }}"
+- name: Fetch template from remote host
+  fetch:
+    src: "{{ loop_var_env.env_src }}"
+    dest: "{{ playbook_dir }}/{{ loop_var_env.env_src | basename }}"
+    flat: yes
+
+- name: Apply template
+  template:
+    src: "{{ playbook_dir }}/{{ loop_var_env.env_src | basename }}"
+    dest: "{{ loop_var_env.env_dst }}"
+        

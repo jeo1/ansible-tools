@@ -1,0 +1,42 @@
+- include_tasks: subtasks/create_docker_network.yml
+
+- include_tasks: subtasks/clone_docker_repo.yml
+
+- include_tasks: subtasks/create_dirs.yml
+  loop: "{{ item.value.config_dir }}"
+  loop_control:
+    loop_var: loop_var_dir
+    label: "{{ loop_var_dir }}" 
+  when:
+    item.value.config_dir is defined
+
+- include_tasks: subtasks/create_envs.yml
+  loop: "{{ item.value.env_templates }}"
+  loop_control:
+    loop_var: loop_var_env
+    label: "{{ loop_var_env }}"
+  when:
+    - item.value.env_templates is defined
+
+- include_tasks: subtasks/restore_config.yml
+
+- include_tasks: subtasks/setup_push_repo.yml
+  loop: "{{ item.value.git_config_push }}"
+  loop_control:
+    loop_var: loop_var_push_repo
+    label: "{{ loop_var_push_repo }}"
+  when:
+    - item.value.git_config_push is defined
+
+- name: "Run docker compose | {{ item.key }}"
+  community.docker.docker_compose_v2:
+    project_src: "{{ item.value.docker_dir }}"
+    state: present
+
+- include_tasks: subtasks/create_nginx_data.yml
+  loop: "{{ item.value.nginx_info }}"
+  loop_control:
+    loop_var: loop_var_nginx_data
+    label: "{{ loop_var_nginx_data }}"
+  when:
+    - item.value.nginx_info is defined

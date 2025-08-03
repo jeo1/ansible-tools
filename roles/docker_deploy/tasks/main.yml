@@ -12,7 +12,7 @@
     job: "bash {{ push_repo_file }}"
 
 - block:
-  - include_tasks: subtasks/deploy_compose.yml
+  - include_tasks: deploy_compose.yml
     loop: "{{ lookup('dict', docker_composes, wantlist=True) }}"
     when: docker_composes is defined
 
