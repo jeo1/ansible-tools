@@ -7,5 +7,4 @@
         gateway: "{{ ansible_default_ipv4.gateway }}"
     driver_options:
       parent: "{{ ansible_default_ipv4.interface }}"
-  when:
-    item.value.docker_network_name is defined
+      

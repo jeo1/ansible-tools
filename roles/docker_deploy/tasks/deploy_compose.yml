@@ -1,4 +1,6 @@
 - include_tasks: docker_compose/create_docker_network.yml
+  when:
+    item.value.docker_network_name is defined
 
 - include_tasks: docker_compose/clone_docker_repo.yml
 
