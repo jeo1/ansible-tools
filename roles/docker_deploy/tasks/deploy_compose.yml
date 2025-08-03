@@ -1,31 +1,7 @@
-- name: Create docker network
-  community.docker.docker_network:
-    name: "{{ item.value.docker_network_name }}"
-    driver: macvlan
-    ipam_config:
-      - subnet: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.prefix }}"
-        gateway: "{{ ansible_default_ipv4.gateway }}"
-    driver_options:
-      parent: "{{ ansible_default_ipv4.interface }}"
-  when:
-    item.value.docker_network_name is defined
-
+- include_tasks: docker_compose/create_docker_network.yml
+- include_tasks: docker_compose/clone_docker_repo.yml
 
 - block:
-  - name: Clone docker compose git repos
-    git:
-      repo: "{{ item.value.git_repo_url }}"
-      dest: "{{ item.value.docker_dir }}"
-    when:
-      - item.value.git_repo_branch is not defined
-  - name: Clone docker compose git repos
-    git:
-      repo: "{{ item.value.git_repo_url }}"
-      dest: "{{ item.value.docker_dir }}"
-      version: "{{ item.value.git_repo_branch }}"
-    when:
-      - item.value.git_repo_branch is defined
-
   - name: Create dirs
     file:
       path: "{{ loop_var.config_path }}"
