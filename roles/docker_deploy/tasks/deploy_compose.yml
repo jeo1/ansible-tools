@@ -10,15 +10,27 @@
   when:
     item.value.config_dir is defined
 
-
-
-- include_tasks: subtasks/create_envs.yml
+- include_tasks: docker_compose/create_env_dirs.yml
   loop: "{{ item.value.env_templates }}"
   loop_control:
-    loop_var: loop_var
-    label: "{{ loop_var }}"
+    loop_var: loop_var_env_dir
+    label: "{{ loop_var_env_dir }}"
   when:
     - item.value.env_templates is defined
+
+- include_tasks: subtasks/create_envs_template.yml
+  loop: "{{ item.value.env_templates }}"
+  loop_control:
+    loop_var: env_template
+    label: "{{ env_template }}"
+
+#- include_tasks: subtasks/create_envs.yml
+#  loop: "{{ item.value.env_templates }}"
+#  loop_control:
+#    loop_var: loop_var
+#    label: "{{ loop_var }}"
+#  when:
+#    - item.value.env_templates is defined
 
 - block:
   - name: Check for config dir
