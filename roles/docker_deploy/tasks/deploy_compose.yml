@@ -18,31 +18,13 @@
   when:
     - item.value.env_templates is defined
 
-#- include_tasks: subtasks/create_envs_template.yml
-#  loop: "{{ item.value.env_templates }}"
-#  loop_control:
-#    loop_var: env_template
-#    label: "{{ env_template }}"
+- include_tasks: docker_compose/restore_config.yml
+
+
+
 
 
 - block:
-  - name: Check for config dir
-    stat:
-      path: "{{ item.value.config_repo_dir }}"
-    register: config_dir_status
-    when:
-      - item.value.config_repo_url is defined
-      - item.value.config_repo_dir is defined
-
-  - name: Restore config
-    git:
-      repo: "{{ item.value.config_repo_url }}"
-      dest: "{{ item.value.config_repo_dir }}"
-    when:
-      - item.value.config_repo_url is defined
-      - item.value.config_repo_dir is defined
-      - not config_dir_status.stat.exists
-
   - include_tasks: subtasks/setup_push_repo.yml
     loop: "{{ item.value.git_config_push }}"
     loop_control:
