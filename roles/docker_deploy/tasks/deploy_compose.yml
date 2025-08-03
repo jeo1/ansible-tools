@@ -1,4 +1,12 @@
-- include_tasks: subtasks/create_docker_network.yml
+- name: Create docker network
+  community.docker.docker_network:
+    name: "{{ item.value.docker_network_name }}"
+    driver: macvlan
+    ipam_config:
+      - subnet: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.prefix }}"
+        gateway: "{{ ansible_default_ipv4.gateway }}"
+    driver_options:
+      parent: "{{ ansible_default_ipv4.interface }}"
   when:
     item.value.docker_network_name is defined
 
