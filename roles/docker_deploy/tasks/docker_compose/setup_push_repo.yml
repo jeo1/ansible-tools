@@ -2,22 +2,22 @@
   - name: Get list of remotes
     shell: sudo git remote -v
     args:
-      chdir: "{{ loop_var.push_repo_dir }}"
+      chdir: "{{ loop_var_push_repo.push_repo_dir }}"
     register: git_remotes
     changed_when: false
   
   - name: Make repo safe directory
     shell: 
-        sudo git config --global --add safe.directory {{ loop_var.push_repo_dir }}
+        sudo git config --global --add safe.directory {{ loop_var_push_repo.push_repo_dir }}
 
 - set_fact:
-    match_found: "{{ loop_var.push_repo_url in git_remotes.stdout }}"
+    match_found: "{{ loop_var_push_repo.push_repo_url in git_remotes.stdout }}"
 
 - name: Add push repo
   shell:
-    sudo git remote set-url --add --push origin {{ loop_var.push_repo_url }}
+    sudo git remote set-url --add --push origin {{ loop_var_push_repo.push_repo_url }}
   args:
-    chdir: "{{ loop_var.push_repo_dir }}"
+    chdir: "{{ loop_var_push_repo.push_repo_dir }}"
   when:
     - not match_found
 
@@ -31,4 +31,5 @@
   lineinfile:
     path: "{{ push_repo_file }}"
     insertbefore: '^.*(?=\)\s*#)'
-    line: '{{ loop_var.push_repo_dir }}'
+    line: '{{ loop_var_push_repo.push_repo_dir }}'
+    

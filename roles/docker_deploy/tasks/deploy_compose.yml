@@ -20,18 +20,13 @@
 
 - include_tasks: docker_compose/restore_config.yml
 
-
-
-
-
-- block:
-  - include_tasks: subtasks/setup_push_repo.yml
-    loop: "{{ item.value.git_config_push }}"
-    loop_control:
-      loop_var: loop_var
-      label: "{{ loop_var }}"
-    when:
-      - item.value.git_config_push is defined
+- include_tasks: docker_compose/setup_push_repo.yml
+  loop: "{{ item.value.git_config_push }}"
+  loop_control:
+    loop_var: loop_var_push_repo
+    label: "{{ loop_var_push_repo }}"
+  when:
+    - item.value.git_config_push is defined
 
 
 - name: "Run docker compose | {{ item.key }}"
