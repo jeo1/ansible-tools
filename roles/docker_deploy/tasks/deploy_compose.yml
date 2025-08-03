@@ -28,17 +28,15 @@
   when:
     - item.value.git_config_push is defined
 
-
 - name: "Run docker compose | {{ item.key }}"
   community.docker.docker_compose_v2:
     project_src: "{{ item.value.docker_dir }}"
     state: present
 
-
-- include_tasks: subtasks/create_nginx_data.yml
+- include_tasks: docker_compose/create_nginx_data.yml
   loop: "{{ item.value.nginx_info }}"
   loop_control:
-    loop_var: loop_var
-    label: "{{ loop_var }}"
+    loop_var: loop_var_nginx_data
+    label: "{{ loop_var_nginx_data }}"
   when:
     - item.value.nginx_info is defined
