@@ -1,4 +1,4 @@
-- name: Clone docker compose git repos
+- name: "Clone docker compose git repos | {{ item.key }}"
   git:
     repo: "{{ item.value.git_repo_url }}"
     dest: "{{ item.value.docker_dir }}"

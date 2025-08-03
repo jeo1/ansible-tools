@@ -1,4 +1,4 @@
-- name: Create docker network
+- name: "Create docker network | {{ item.key }}"
   community.docker.docker_network:
     name: "{{ item.value.docker_network_name }}"
     driver: macvlan
