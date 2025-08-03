@@ -1,8 +1,8 @@
-- include_tasks: docker_compose/create_docker_network.yml
+- include_tasks: subtasks/create_docker_network.yml
 
-- include_tasks: docker_compose/clone_docker_repo.yml
+- include_tasks: subtasks/clone_docker_repo.yml
 
-- include_tasks: docker_compose/create_dirs.yml
+- include_tasks: subtasks/create_dirs.yml
   loop: "{{ item.value.config_dir }}"
   loop_control:
     loop_var: loop_var_dir
@@ -10,7 +10,7 @@
   when:
     item.value.config_dir is defined
 
-- include_tasks: docker_compose/create_envs.yml
+- include_tasks: subtasks/create_envs.yml
   loop: "{{ item.value.env_templates }}"
   loop_control:
     loop_var: loop_var_env
@@ -18,9 +18,9 @@
   when:
     - item.value.env_templates is defined
 
-- include_tasks: docker_compose/restore_config.yml
+- include_tasks: subtasks/restore_config.yml
 
-- include_tasks: docker_compose/setup_push_repo.yml
+- include_tasks: subtasks/setup_push_repo.yml
   loop: "{{ item.value.git_config_push }}"
   loop_control:
     loop_var: loop_var_push_repo
@@ -33,7 +33,7 @@
     project_src: "{{ item.value.docker_dir }}"
     state: present
 
-- include_tasks: docker_compose/create_nginx_data.yml
+- include_tasks: subtasks/create_nginx_data.yml
   loop: "{{ item.value.nginx_info }}"
   loop_control:
     loop_var: loop_var_nginx_data
