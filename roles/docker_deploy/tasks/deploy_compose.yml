@@ -1,18 +1,15 @@
 - include_tasks: docker_compose/create_docker_network.yml
+
 - include_tasks: docker_compose/clone_docker_repo.yml
 
-- block:
-  - name: Create dirs
-    file:
-      path: "{{ loop_var.config_path }}"
-      state: "{{ loop_var.state }}"
-      mode: "{{ loop_var.file_mode }}"
-    loop: "{{ item.value.config_dir }}"
-    loop_control:
-      loop_var: loop_var
-      label: "{{ loop_var }}" 
-    when:
-      item.value.config_dir is defined
+- include_tasks: docker_compose/create_dirs.yml
+  loop: "{{ item.value.config_dir }}"
+  loop_control:
+    loop_var: loop_var_dir
+    label: "{{ loop_var_dir }}" 
+  when:
+    item.value.config_dir is defined
+
 
 
 - include_tasks: subtasks/create_envs.yml

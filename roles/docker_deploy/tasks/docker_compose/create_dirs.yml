@@ -1,0 +1,6 @@
+- name: "Create dirs | {{ item.key }}"
+  file:
+    path: "{{ loop_var_dir.config_path }}"
+    state: "{{ loop_var_dir.state }}"
+    mode: "{{ loop_var_dir.file_mode }}"
+    
