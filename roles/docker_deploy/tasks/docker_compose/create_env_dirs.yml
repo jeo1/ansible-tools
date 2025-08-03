@@ -1,6 +1,5 @@
-- name: "Ensure parent directory exists | {{ item.key }} | {{ loop_var_env_dir.env_dst }}"
+- name: "Ensure parent directory exists | {{ item.key }} | {{ loop_var_env_dir.env_dst | dirname }}"
   file:
     path: "{{ loop_var_env_dir.env_dst | dirname }}"
     state: directory
     mode: '0755'
-    
