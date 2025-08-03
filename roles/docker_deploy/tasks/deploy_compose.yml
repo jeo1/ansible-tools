@@ -50,7 +50,7 @@
     when:
       item.value.env_files is defined
 
-- include_tasks: create_envs.yml
+- include_tasks: subtasks/create_envs.yml
   loop: "{{ item.value.env_templates }}"
   loop_control:
     loop_var: loop_var
@@ -76,7 +76,7 @@
       - item.value.config_repo_dir is defined
       - not config_dir_status.stat.exists
 
-  - include_tasks: setup_push_repo.yml
+  - include_tasks: subtasks/setup_push_repo.yml
     loop: "{{ item.value.git_config_push }}"
     loop_control:
       loop_var: loop_var
@@ -91,7 +91,7 @@
     state: present
 
 
-- include_tasks: create_nginx_data.yml
+- include_tasks: subtasks/create_nginx_data.yml
   loop: "{{ item.value.nginx_info }}"
   loop_control:
     loop_var: loop_var
