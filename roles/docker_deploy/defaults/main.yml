@@ -1,2 +1,3 @@
 nginx_conf_dst: /opt/nginx_data.yml
 push_repo_file: /opt/push_repos.sh
+service_url_default: "homelab.internal"
