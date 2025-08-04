@@ -33,3 +33,9 @@
   roles:
     - role: gitea_setup
   tags: gitea_setup
+  
+- hosts: all
+  become: true
+  roles:
+    - role: update
+  tags: update
