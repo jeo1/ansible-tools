@@ -1,0 +1,5 @@
+KUMA_URL: http://192.168.1.90:3001
+KUMA_SETUP_URL: "{{ KUMA_URL }}/setup"
+KUMA_USERNAME: default_user
+KUMA_PASSWORD: default_password
+work_dir: /tmp

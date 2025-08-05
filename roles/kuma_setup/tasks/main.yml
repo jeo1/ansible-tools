@@ -1,0 +1,29 @@
+- name: Apply template
+  template:
+    src: setup-kuma.js.j2
+    dest: "{{ work_dir }}/setup-kuma.js"
+
+- name: "Wait until kuma set"
+  uri:
+    url: "{{ KUMA_SETUP_URL }}"
+    return_content: no
+    status_code: 200
+    validate_certs: no
+  register: result
+  ignore_errors: true
+  until: result.status == 200
+  retries: 10
+  delay: 5
+  changed_when: false
+
+- name: Run puppeteer to setup kuma
+  shell: |
+    sudo docker run -i --init --cap-add=SYS_ADMIN --rm ghcr.io/puppeteer/puppeteer:latest node -e "$(cat setup-kuma.js)"
+  args:
+    chdir: "{{ work_dir }}"
+
+- name: Remove file (delete file)
+  file:
+    path: "{{ work_dir }}/setup-kuma.js"
+    state: absent
+    

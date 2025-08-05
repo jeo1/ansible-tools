@@ -1,0 +1,27 @@
+const puppeteer = require('puppeteer');
+
+const SETUP_URL =  "{{ KUMA_SETUP_URL }}";
+const USERNAME = "{{ KUMA_USERNAME }}";
+const PASSWORD = "{{ KUMA_PASSWORD }}";
+
+(async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto(SETUP_URL);
+
+  const passwordRepeatExists = await page.$('[data-cy="password-repeat-input"]');
+
+  if (!passwordRepeatExists) {
+    console.log('Setup form not found. Skipping setup.');
+    await browser.close();
+    return;
+  }
+
+  await page.type('[data-cy="username-input"]', USERNAME);
+  await page.type('[data-cy="password-input"]', PASSWORD);
+  await page.type('[data-cy="password-repeat-input"]', PASSWORD);
+
+  await page.click('[data-cy="submit-setup-form"]');
+
+  await browser.close();
+})();
