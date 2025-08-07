@@ -1,3 +1,8 @@
+- set_fact:
+    CONTAINER_NAME: "{{ item.key }}"
+  when:
+    - item.value.container_name is not defined
+
 - include_tasks: subtasks/create_docker_network.yml
 
 - include_tasks: subtasks/clone_docker_repo.yml
