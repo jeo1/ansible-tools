@@ -2,7 +2,7 @@
 
 REPO_DIRS=(
 
-) #
+)
 
 for DIR in "${REPO_DIRS[@]}"; do
   cd $DIR || continue
