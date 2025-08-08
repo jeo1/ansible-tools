@@ -4,44 +4,12 @@
     service_port: "{{ ngix_data.service_port }}"
     service_url: "{{ ngix_data.service_url }}"
 
-#- name: Copy server conf
-#  template:
-#    src: server.j2
-#    dest: "{{ server_conf_path }}/{{ service_name }}.conf"
-#
-#- name: Copy upstream conf
-#  template:
-#    src: upstream.j2
-#    dest: "{{ upstream_conf_path }}/{{ service_name }}.conf"
-
-- name: Copy server conf in parallel
+- name: Copy server conf
   template:
     src: server.j2
     dest: "{{ server_conf_path }}/{{ service_name }}.conf"
-  async: 60
-  poll: 0
-  register: server_conf_task
 
-- name: Copy upstream conf in parallel
+- name: Copy upstream conf
   template:
     src: upstream.j2
     dest: "{{ upstream_conf_path }}/{{ service_name }}.conf"
-  async: 60
-  poll: 0
-  register: upstream_conf_task
-
-- name: Wait for server conf completion
-  async_status:
-    jid: "{{ server_conf_task.ansible_job_id }}"
-  register: server_result
-  until: server_result.finished
-  retries: 12
-  delay: 5
-
-- name: Wait for upstream conf completion
-  async_status:
-    jid: "{{ upstream_conf_task.ansible_job_id }}"
-  register: upstream_result
-  until: upstream_result.finished
-  retries: 12
-  delay: 5
