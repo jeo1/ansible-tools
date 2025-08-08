@@ -13,7 +13,6 @@
 - hosts: all
   become: true
   strategy: free
-  serial: 10
   roles:
     - role: get_nginx_data
   tags: get_nginx_data
