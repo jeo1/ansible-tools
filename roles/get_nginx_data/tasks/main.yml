@@ -7,12 +7,32 @@
       - "{{ server_conf_path }}"
       - "{{ upstream_conf_path }}"
 
+#- include_tasks: subtasks/create_confs.yml
+#  loop: "{{ nginx_conf_host_ip_list }}"
+#  loop_control:
+#    loop_var: ngix_data
+#    label: "{{ ngix_data }}"
+#  when:
+#    - nginx_conf_host_ip_list is defined
+
+
 - include_tasks: subtasks/create_confs.yml
   loop: "{{ nginx_conf_host_ip_list }}"
   loop_control:
     loop_var: ngix_data
     label: "{{ ngix_data }}"
-  async: 60
-  poll: 0
   when:
     - nginx_conf_host_ip_list is defined
+  async: 300  # Maximum time to wait for each task (in seconds)
+  poll: 0     # Don't wait for completion, start all tasks immediately
+  register: async_results
+
+- name: Wait for all parallel tasks to complete
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  loop: "{{ async_results.results }}"
+  register: async_poll_results
+  until: async_poll_results.finished
+  retries: 30
+  delay: 10
+  when: item.ansible_job_id is defined
