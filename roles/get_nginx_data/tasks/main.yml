@@ -12,5 +12,7 @@
   loop_control:
     loop_var: ngix_data
     label: "{{ ngix_data }}"
+  async: 60
+  poll: 0
   when:
     - nginx_conf_host_ip_list is defined
