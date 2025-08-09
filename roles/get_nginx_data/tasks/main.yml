@@ -14,3 +14,4 @@
     label: "{{ ngix_data }}"
   when:
     - nginx_conf_host_ip_list is defined
+  notify: restart docker
