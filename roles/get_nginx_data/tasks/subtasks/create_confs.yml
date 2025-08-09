@@ -8,8 +8,10 @@
   template:
     src: server.j2
     dest: "{{ server_conf_path }}/{{ service_name }}.conf"
+  notify: restart docker
 
 - name: Copy upstream conf
   template:
     src: upstream.j2
     dest: "{{ upstream_conf_path }}/{{ service_name }}.conf"
+  notify: restart docker
