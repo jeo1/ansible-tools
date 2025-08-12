@@ -13,8 +13,8 @@
 - hosts: all
   become: true
   roles:
-    - role: get_nginx_data
-  tags: get_nginx_data
+    - role: setup_nginx
+  tags: setup_nginx
 
 - hosts: all
   become: true
