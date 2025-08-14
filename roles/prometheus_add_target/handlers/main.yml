@@ -1,0 +1,6 @@
+- name: Restart docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ prometheus_docker_dir }}"
+    state: restarted
+  when:
+    - file_check.stat.exists
