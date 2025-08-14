@@ -5,5 +5,5 @@ prometheus_global_config: |
 
 prometheus_static_configs: |2
     - job_name: {{ prometheus_job_name }}
-            static_configs:
-            - targets:
+      static_configs:
+      - targets:
