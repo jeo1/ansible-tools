@@ -1,3 +1,0 @@
-prometheus_config: /home/config/prometheus/prometheus.yml
-prometheus_docker_dir: /home/prometheus
-job_name: prometheus
