@@ -1,0 +1,9 @@
+prometheus_global_config: |
+    global:
+      scrape_interval: {{ global_scrape_interval }}
+    scrape_configs:
+
+prometheus_static_configs: |2
+    - job_name: {{ prometheus_job_name }}
+            static_configs:
+            - targets:

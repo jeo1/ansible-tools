@@ -35,6 +35,12 @@
     - role: prometheus_setup
   tags: prometheus_setup
 
+- hosts: all
+  become: true
+  roles:
+    - role: prometheus_add_target
+  tags: prometheus_add_target
+
 - hosts: gitea
   become: true
   roles:

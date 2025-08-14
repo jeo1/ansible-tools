@@ -1,0 +1,58 @@
+- name: Create Prometheus config dir
+  file:
+    path: "{{ prometheus_config | dirname }}"
+    state: directory
+    mode: '0755'
+
+- name: Check for Prometheus config
+  stat:
+    path: "{{ prometheus_config }}"
+  register: file_check
+
+- name: Create Prometheus config file
+  file:
+    path: "{{ prometheus_config }}"
+    state: touch
+  when: not file_check.stat.exists
+
+- name: Create global config
+  blockinfile:
+    path: "{{ prometheus_config }}"
+    marker: "# {mark} GLOBAL CONFIG"
+    insertafter: BOF
+    block: "{{ prometheus_global_config }}"
+
+- block:
+  - set_fact:
+      prometheus_job_name: "{{ collector_type }} - {{ collector_port }}"
+      collector_address: "{{ collector_ip }}:{{ collector_port }}"
+
+  - name: Create static_configs
+    blockinfile:
+      path: "{{ prometheus_config }}"
+      marker: "# {mark} STATIC CONFIG {{ prometheus_job_name }}"
+      insertafter: "# END GLOBAL CONFIG"
+      block: "{{ prometheus_static_configs }}"
+      state: present
+
+  - name: Insert collector address
+    lineinfile:
+      path: "{{ prometheus_config }}"
+      insertafter: "# END STATIC CONFIG {{ prometheus_job_name }}"
+      line: "    - {{ collector_address }}"
+      state: present
+  when:
+    - collector_ip is defined
+    - collector_port is defined
+
+- name: Check if the file exists
+  stat:
+    path: "{{ prometheus_docker_dir }}"
+  register: file_check
+
+- name: Restart docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ prometheus_docker_dir }}"
+    state: restarted
+  when:
+    - file_check.stat.exists
