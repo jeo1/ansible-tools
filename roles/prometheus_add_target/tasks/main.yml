@@ -2,7 +2,7 @@
   file:
     path: "{{ prometheus_config_file | dirname }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Check for Prometheus config
   stat:
@@ -23,24 +23,24 @@
     block: "{{ prometheus_global_config }}"
 
 - block:
-  - set_fact:
-      prometheus_job_name: "{{ collector_type }} - {{ collector_port }}"
-      collector_address: "{{ collector_ip }}:{{ collector_port }}"
+    - set_fact:
+        prometheus_job_name: "{{ collector_type }} - {{ collector_port }}"
+        collector_address: "{{ collector_ip }}:{{ collector_port }}"
 
-  - name: Create static_configs
-    blockinfile:
-      path: "{{ prometheus_config_file }}"
-      marker: "# {mark} STATIC CONFIG {{ prometheus_job_name }}"
-      insertafter: "# END GLOBAL CONFIG"
-      block: "{{ prometheus_static_configs }}"
-      state: present
+    - name: Create static_configs
+      blockinfile:
+        path: "{{ prometheus_config_file }}"
+        marker: "# {mark} STATIC CONFIG {{ prometheus_job_name }}"
+        insertafter: "# END GLOBAL CONFIG"
+        block: "{{ prometheus_static_configs }}"
+        state: present
 
-  - name: Insert collector address
-    lineinfile:
-      path: "{{ prometheus_config_file }}"
-      insertafter: "# END STATIC CONFIG {{ prometheus_job_name }}"
-      line: "    - {{ collector_address }}"
-      state: present
+    - name: Insert collector address
+      lineinfile:
+        path: "{{ prometheus_config_file }}"
+        insertafter: "# END STATIC CONFIG {{ prometheus_job_name }}"
+        line: "    - {{ collector_address }}"
+        state: present
   when:
     - collector_ip is defined
     - collector_port is defined
@@ -50,9 +50,9 @@
     path: "{{ prometheus_docker_dir }}"
   register: file_check
 
-##- name: Restart docker compose
-##  community.docker.docker_compose_v2:
-##    project_src: "{{ prometheus_docker_dir }}"
-##    state: restarted
-##  when:
-##    - file_check.stat.exists
+- name: Restart docker compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ prometheus_docker_dir }}"
+    state: restarted
+  when:
+    - file_check.stat.exists
