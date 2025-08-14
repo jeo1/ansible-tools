@@ -1,4 +1,4 @@
 global_scrape_interval: 10s
 collector_type: unnamed collector
 prometheus_docker_dir: /home/prometheus
-prometheus_config: /home/config/prometheus/prometheus.yml
+prometheus_config_file: /home/config/prometheus/prometheus.yml
