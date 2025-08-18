@@ -1,4 +1,4 @@
-- name: restart docker compose
+- name: Restart docker compose
   community.docker.docker_compose_v2:
     project_src: "{{ nginx_docker_dir }}"
     state: restarted
