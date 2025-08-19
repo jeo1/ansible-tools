@@ -1,3 +1,8 @@
+github_action_url: https://github.com/actions/runner/releases/download/v2.328.0/actions-runner-linux-x64-2.328.0.tar.gz
+github_action_hash: 01066fad3a2893e63e6ca880ae3a1fad5bf9329d60e77ee15f2b97c148c3cd4e
+
+github_action_tar_file: actions-runner-linux-x64-2.328.0.tar.gz
+
 github_list_runners_url: "https://api.github.com/repos/{{ github_owner }}/{{ github_repo }}/actions/runners"
 github_get_runner_token_url: "https://api.github.com/repos/{{ github_owner }}/{{ github_repo }}/actions/runners/registration-token"
 

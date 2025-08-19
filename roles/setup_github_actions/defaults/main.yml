@@ -1,2 +1,3 @@
 default_user: jeo
 github_runner_parent_dir: /home
+github_runner_name: ubuntu-test

@@ -1,0 +1,13 @@
+- name: Check for github-action directory
+  stat:
+    path: "{{ github_runner_dir }}"
+  register: file_check
+
+- name: Create github-action directory
+  file:
+    path: "{{ github_runner_dir }}"
+    state: directory
+    owner: "{{ default_user }}"
+    group: "{{ default_user }}"
+    mode: "0755"
+  when: not file_check.stat.exists

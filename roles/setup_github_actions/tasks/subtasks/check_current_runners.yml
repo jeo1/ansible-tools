@@ -1,9 +1,9 @@
 - set_fact:
-    runner_dir: "{{ github_runner_parent_dir }}/{{ github_response_runner.name }}"
+    github_runner_dir: "{{ github_runner_parent_dir }}/{{ github_runner_name_prefix }}{{ github_response_runner.name }}"
     tmux_runner_name: "{{ github_runner_name_prefix }}{{ github_response_runner.name }}"
 
 - stat:
-    path: "{{ runner_dir }}"
+    path: "{{ github_runner_dir }}"
   register: github_runner_dir_check
 
 - block:
@@ -17,9 +17,9 @@
 
     - name: Run github actions
       shell: |
-        tmux new-session -d -s {{ tmux_runner_name }} -c {{ runner_dir }} './run.sh'
+        tmux new-session -d -s {{ tmux_runner_name }} -c {{ github_runner_dir }} './run.sh'
       become_user: "{{ default_user }}"
       args:
-        chdir: "{{ runner_dir }}"
+        chdir: "{{ github_runner_dir }}"
       when: github_tmux_session.rc != 0
   when: github_runner_dir_check.stat.exists
