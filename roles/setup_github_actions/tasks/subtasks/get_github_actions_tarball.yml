@@ -1,0 +1,40 @@
+- stat:
+    path: "{{ github_runner_dir }}/run.sh"
+  register: run_file_check
+
+- block:  
+  - stat:
+      path: "{{ github_actions_tarball }}"
+    register: tarball_file_check
+
+  - name: Download actions runner tarball
+    get_url:
+      url: "{{ github_action_url }}"
+      dest: "{{ github_actions_tarball }}"
+      #mode: "0644"
+      #owner: "{{ default_user }}"
+      #group: "{{ default_user }}"
+    when: not tarball_file_check.stat.exists
+
+  - name: Get file checksum
+    stat:
+      path: "{{ github_actions_tarball }}"
+      checksum_algorithm: sha256
+    register: github_action_tar_stat
+
+  - name: Validate the checksum
+    fail:
+      msg: "Checksum mismatch."
+    when: github_action_tar_stat.stat.checksum != github_action_hash
+
+  - name: tar xzf ./actions-runner-linux-x64-2.328.0.tar.gz
+    unarchive:
+      src: "{{ github_actions_tarball }}"
+      dest: "{{ github_runner_dir }}"
+      remote_src: yes
+
+  - name: Remove file (delete file)
+    file:
+      path: "{{ github_actions_tarball }}"
+      state: absent
+  when: not run_file_check.stat.exists
