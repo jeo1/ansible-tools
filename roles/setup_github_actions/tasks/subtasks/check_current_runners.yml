@@ -1,0 +1,25 @@
+- set_fact:
+    runner_dir: "{{ github_runner_parent_dir }}/{{ github_response_runner.name }}"
+    tmux_runner_name: "{{ github_runner_name_prefix }}{{ github_response_runner.name }}"
+
+- stat:
+    path: "{{ runner_dir }}"
+  register: github_runner_dir_check
+
+- block:
+    - name: Check if github-actions tmux session is running
+      shell: |
+        tmux has-session -t {{ tmux_runner_name }}
+      become_user: "{{ default_user }}"
+      register: github_tmux_session
+      ignore_errors: true
+      changed_when: false
+
+    - name: Run github actions
+      shell: |
+        tmux new-session -d -s {{ tmux_runner_name }} -c {{ runner_dir }} './run.sh'
+      become_user: "{{ default_user }}"
+      args:
+        chdir: "{{ runner_dir }}"
+      when: github_tmux_session.rc != 0
+  when: github_runner_dir_check.stat.exists

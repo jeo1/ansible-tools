@@ -32,6 +32,12 @@
 - hosts: all
   become: true
   roles:
+    - role: setup_github_actions
+  tags: setup_github_actions
+
+- hosts: all
+  become: true
+  roles:
     - role: prometheus_add_target
   tags: prometheus_add_target
 
