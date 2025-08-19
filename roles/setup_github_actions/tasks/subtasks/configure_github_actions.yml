@@ -1,0 +1,10 @@
+- name: Run config.sh with URL and token
+  shell: |
+    ./config.sh \
+      --unattended \
+      --url {{ github_runner_config_url }} \
+      --token {{ github_runner_token }} \
+      --name {{ github_runner_name }}
+  become_user: "{{ default_user }}"
+  args:
+    chdir: "{{ github_runner_dir }}"

@@ -1,0 +1,16 @@
+- set_fact:
+    github_action_tmux_cmd: "tmux new-session -d -s {{ tmux_runner_name }} -c {{ github_runner_dir }} './run.sh'"
+
+- name: Run github actions
+  shell: |
+    {{ github_action_tmux_cmd }}
+  become_user: "{{ default_user }}"
+  args:
+    chdir: "{{ github_runner_dir }}"
+
+- name: Add github action to boot
+  cron:
+    name: "Run github actions at boot"
+    special_time: reboot
+    job: "{{ github_action_tmux_cmd }}"
+    user: "{{ default_user }}"

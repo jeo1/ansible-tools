@@ -15,11 +15,6 @@
       ignore_errors: true
       changed_when: false
 
-    - name: Run github actions
-      shell: |
-        tmux new-session -d -s {{ tmux_runner_name }} -c {{ github_runner_dir }} './run.sh'
-      become_user: "{{ default_user }}"
-      args:
-        chdir: "{{ github_runner_dir }}"
+    - include_tasks: run_github_actions.yml
       when: github_tmux_session.rc != 0
   when: github_runner_dir_check.stat.exists

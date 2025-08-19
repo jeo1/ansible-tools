@@ -26,14 +26,16 @@
     - set_fact:
         github_runner_token: "{{ github_response_runner_token.json.token }}"
         github_runner_dir: "{{ github_runner_parent_dir }}/{{ github_runner_name_prefix }}{{ github_runner_name }}"
-    
-    - set_fact:    
+        tmux_runner_name: "{{ github_runner_name_prefix }}{{ github_runner_name }}"
+
+    - set_fact:
         github_actions_tarball: "{{ github_runner_dir }}/{{ github_action_tar_file }}"
-    
+
     - include_tasks: subtasks/create_github_actions_dir.yml
     - include_tasks: subtasks/get_github_actions_tarball.yml
+    - include_tasks: subtasks/configure_github_actions.yml
+    - include_tasks: subtasks/run_github_actions.yml
   when: github_response_runner_count.json.total_count == 0
-
 
 - include_tasks: subtasks/check_current_runners.yml
   loop: "{{ github_response_runner_count.json.runners }}"
