@@ -1,5 +1,6 @@
 - include_tasks: github_actions.yml
   loop: "{{ github_actions }}"
   loop_control:
-    loop_var: github_actions
-    label: "{{ github_actions }}"
+    loop_var: github_action
+    label: "{{ github_action }}"
+

@@ -1,7 +1,7 @@
 - set_fact:
-    github_token: "{{ github_actions.github_token }}"
-    github_owner: "{{ github_actions.github_owner }}"
-    github_repo: "{{ github_actions.github_repo }}"
+    github_token: "{{ github_action.github_token }}"
+    github_owner: "{{ github_action.github_owner }}"
+    github_repo: "{{ github_action.github_repo }}"
 
 - name: Query GitHub API for self-hosted runners
   uri:
